@@ -47,11 +47,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          release_name="$(node -p 'require("./manifest.json").name')"
           if gh release view "$GITHUB_REF_NAME" --json isDraft > release-state.json 2>/dev/null; then
             node -e "if (!require('./release-state.json').isDraft) process.exit(1)"
             gh release upload "$GITHUB_REF_NAME" main.js manifest.json styles.css --clobber
           else
-            gh release create "$GITHUB_REF_NAME" main.js manifest.json styles.css --verify-tag --draft --title "Community Manager CN $GITHUB_REF_NAME" --generate-notes
+            gh release create "$GITHUB_REF_NAME" main.js manifest.json styles.css --verify-tag --draft --title "$release_name $GITHUB_REF_NAME" --generate-notes
           fi
           gh attestation verify main.js --repo "$GITHUB_REPOSITORY"
           gh attestation verify styles.css --repo "$GITHUB_REPOSITORY"

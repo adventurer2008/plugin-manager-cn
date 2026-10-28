@@ -25,8 +25,8 @@ writeFileSync("versions.json", JSON.stringify(versions, null, 2) + "\n");
 writeFileSync(
   "README.md",
   readFileSync("README.md", "utf8").replace(
-    "Windows MVP " + previous,
-    "Windows MVP " + version,
+    /^# [^\r\n]+/,
+    "# " + manifest.name + " — " + version,
   ),
 );
 console.log(

@@ -47,7 +47,7 @@ test("Obsidian 1.12 renders and refreshes without invoking the 1.13 API", async 
 });
 test("declarative settings expose search terms and render the manager in one container", () => {
   const page = Object.create(Page.prototype);
-  page.pm = { manifest: { name: "Community Manager CN" } };
+  page.pm = { manifest: { name: "Wujie Hub" } };
   let rendered;
   page.renderPage = (el) => {
     rendered = el;

@@ -154,8 +154,16 @@ class Page extends CompatibleSettingsTab {
     return [
       {
         name: this.pm.manifest.name,
-        desc: "搜索社区插件、检查已安装插件更新、无界同步版本与回退",
-        aliases: ["安装", "更新", "无界同步", "Alpha", "回退"],
+        desc: "插件安装中心：在国内网络环境下，便捷搜索、安装和升级社区插件；管理无界同步版本与回退。",
+        aliases: [
+          "插件安装中心",
+          "安装",
+          "升级",
+          "更新",
+          "无界同步",
+          "Alpha",
+          "回退",
+        ],
         render: (setting) => {
           setting.settingEl.empty();
           setting.settingEl.addClass("pmcn-settings-root");
@@ -169,7 +177,12 @@ class Page extends CompatibleSettingsTab {
     this.pageVisible = true;
     if (opening) this.openGeneration++;
     el.empty();
-    new Setting(el).setName(this.pm.manifest.name).setHeading();
+    new Setting(el)
+      .setName(this.pm.manifest.name)
+      .setDesc(
+        "插件安装中心 · 在国内网络环境下，便捷搜索、安装和升级社区插件，管理无界同步版本与本机代码回退。",
+      )
+      .setHeading();
     if (this.status) el.createDiv({ cls: "pmcn-status", text: this.status });
 
     const p = manager(this.app);

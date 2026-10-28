@@ -1,14 +1,18 @@
-# Community Manager CN — 0.1.15
+# Wujie Hub — 0.1.16
+
+插件安装中心
+
+在国内网络环境下，便捷搜索、安装和升级社区插件，管理无界同步版本与本机代码回退。
 
 ## Overview
 
-Community Manager CN searches, installs, and updates Obsidian community plugins through GitHub download mirrors. Its single settings page also provides a dedicated Wujie Sync section for selecting stable and Alpha releases, checking SHA-256 digests, and restoring a local code version that the user has explicitly confirmed as working. The interface is in Chinese. The plugin ID and installation folder are `plugin-manager-cn`.
+Wujie Hub searches, installs, and updates Obsidian community plugins through GitHub download mirrors. Its single settings page also provides a dedicated Wujie Sync section for selecting stable and Alpha releases, checking SHA-256 digests, and restoring a local code version that the user has explicitly confirmed as working. The interface is in Chinese. The plugin ID and installation folder are `plugin-manager-cn`.
 
 ## Installation and usage
 
 1. Install from the [Obsidian Community listing](https://community.obsidian.md/plugins/plugin-manager-cn), or download `main.js`, `manifest.json`, and `styles.css` from the [latest GitHub release](https://github.com/adventurer2008/plugin-manager-cn/releases/latest).
 2. For manual installation, place those three files in `<config-dir>/plugins/plugin-manager-cn/`, normally `.obsidian/plugins/plugin-manager-cn/`. Preserve any existing `data.json` and all other files when replacing release files.
-3. In Obsidian, open **Settings → Community plugins**, enable **Community Manager CN**, and open its settings page. You can also run the **打开插件管理** command (Open plugin manager).
+3. In Obsidian, open **Settings → Community plugins**, enable **Wujie Hub**, and open its settings page. You can also run the **打开插件管理** command (Open plugin manager).
 4. Enter a plugin name, description, or ID in the search field. Select **安装** (Install), review the version and trust prompt, and confirm the download. New plugins remain disabled until you enable them in Obsidian's Community plugins settings.
 5. Select **检查更新** (Check for updates) beside **已安装插件** (Installed plugins). Update an individual result with **加速更新** (Update through mirrors), or use **全部加速更新** (Update all through mirrors). Updates preserve each plugin's enabled state and configuration. The manager itself and Wujie Sync are excluded from ordinary updates.
 6. In the Wujie Sync section, select **检查更新**, choose a version, then **安装所选版本** (Install selected version). To save a rollback target, use the more menu and **标记当前版本正常** (Mark current version as working) only after testing that version yourself. The rollback button restores code, preserving current configuration; it cannot undo configuration or remote data migrations.
@@ -30,15 +34,15 @@ Requires Obsidian **1.12.0 or later** and allows installation on Windows, macOS,
 
 Copyright 2026 Wujie Sync. Licensed under the [Apache License 2.0](LICENSE).
 
-单页 Obsidian 社区插件管理器。
+单页 Obsidian 社区插件管理器，中文名为“插件安装中心”。
 
-仓库名、包名和插件 ID 保持 `plugin-manager-cn`，插件显示名称为 `Community Manager CN`。
+仓库名、包名和插件 ID 保持 `plugin-manager-cn`，插件显示名称为 `Wujie Hub`。
 
 ## 安装与使用
 
 1. 从 [Obsidian 社区页面](https://community.obsidian.md/plugins/plugin-manager-cn)安装，或从 [GitHub 最新发行版](https://github.com/adventurer2008/plugin-manager-cn/releases/latest)下载 `main.js`、`manifest.json`、`styles.css`。
 2. 手动安装时，将三个文件放入 `<配置目录>/plugins/plugin-manager-cn/`，配置目录通常是 `.obsidian`。仅替换这三个发行文件，保留已有 `data.json` 及其他文件。
-3. 在 Obsidian 第三方插件设置中启用 Community Manager CN，然后打开它的设置页面。也可使用“打开插件管理”命令。
+3. 在 Obsidian 第三方插件设置中启用 Wujie Hub，然后打开它的设置页面。也可使用“打开插件管理”命令。
 4. 搜索名称、描述或 ID，输入即筛选，点击“安装”确认版本后下载。已安装的搜索结果只显示状态，不提供启用或卸载功能。新装插件默认禁用，请到官方第三方插件设置中启用。更新保留原启用状态。
 5. “已安装插件”区仅显示“检查更新”按钮；检查后只列出有更新的插件，支持单独或全部加速更新。启用、禁用和卸载使用官方界面。批量操作跳过管理器自身和 `wujie-sync`。
 

@@ -1,9 +1,9 @@
 {
   "id": "plugin-manager-cn",
-  "name": "Community Manager CN",
-  "version": "0.1.15",
+  "name": "Wujie Hub",
+  "version": "0.1.16",
   "minAppVersion": "1.12.0",
-  "description": "Search, install, and update community plugins through download mirrors, and manage Wujie Sync test releases.",
+  "description": "Search, install, and update community plugins through download mirrors for users in China, and manage Wujie Sync releases.",
   "author": "Wujie Sync",
   "isDesktopOnly": false
 }
