@@ -22,7 +22,7 @@ export default class SiteAlphaSmoke extends Plugin {
         alpha = releases.find((r) => r.channel === "Alpha");
       if (!alpha) throw Error("no published alpha");
       results.push("real-download-site-alpha-" + alpha.version);
-      const installer = new Installer(this.app, "plugin-manager-cn"),
+      const installer = new Installer(this.app, "wujie-hub"),
         dir = this.app.vault.configDir + "/plugins/wujie-sync";
       const baseline = await readBundle(a, dir);
       installer.validate("wujie-sync", baseline);

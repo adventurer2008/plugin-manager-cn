@@ -1,17 +1,19 @@
-# Wujie Hub — 0.1.16
+# Wujie Hub — 0.1.17
 
 插件安装中心
+
+ID 迁移准备分支：GitHub 仓库已改名，正式社区 ID 仍需管理员迁移。当前可用社区版本为旧 ID 的0.1.16。迁移步骤及申请草稿见 [ID-MIGRATION](docs/ID-MIGRATION.md)。
 
 在国内网络环境下，便捷搜索、安装和升级社区插件，管理无界同步版本与本机代码回退。
 
 ## Overview
 
-Wujie Hub searches, installs, and updates Obsidian community plugins through GitHub download mirrors. Its single settings page also provides a dedicated Wujie Sync section for selecting stable and Alpha releases, checking SHA-256 digests, and restoring a local code version that the user has explicitly confirmed as working. The interface is in Chinese. The plugin ID and installation folder are `plugin-manager-cn`.
+Wujie Hub searches, installs, and updates Obsidian community plugins through GitHub download mirrors. Its single settings page also provides a dedicated Wujie Sync section for selecting stable and Alpha releases, checking SHA-256 digests, and restoring a local code version that the user has explicitly confirmed as working. The interface is in Chinese. The plugin ID and installation folder are `wujie-hub`.
 
 ## Installation and usage
 
-1. Install from the [Obsidian Community listing](https://community.obsidian.md/plugins/plugin-manager-cn), or download `main.js`, `manifest.json`, and `styles.css` from the [latest GitHub release](https://github.com/adventurer2008/plugin-manager-cn/releases/latest).
-2. For manual installation, place those three files in `<config-dir>/plugins/plugin-manager-cn/`, normally `.obsidian/plugins/plugin-manager-cn/`. Preserve any existing `data.json` and all other files when replacing release files.
+1. This branch prepares the new `wujie-hub` ID. Community migration is pending administrator assistance. To test it, build this branch with `npm ci` and `npm run build`, then use the three files in `dist/wujie-hub/`. The published 0.1.16 release still uses `plugin-manager-cn`; do not put those older files in the new folder.
+2. For manual installation, place those three files in `<config-dir>/plugins/wujie-hub/`, normally `.obsidian/plugins/wujie-hub/`. Preserve any existing `data.json` and all other files when replacing release files.
 3. In Obsidian, open **Settings → Community plugins**, enable **Wujie Hub**, and open its settings page. You can also run the **打开插件管理** command (Open plugin manager).
 4. Enter a plugin name, description, or ID in the search field. Select **安装** (Install), review the version and trust prompt, and confirm the download. New plugins remain disabled until you enable them in Obsidian's Community plugins settings.
 5. Select **检查更新** (Check for updates) beside **已安装插件** (Installed plugins). Update an individual result with **加速更新** (Update through mirrors), or use **全部加速更新** (Update all through mirrors). Updates preserve each plugin's enabled state and configuration. The manager itself and Wujie Sync are excluded from ordinary updates.
@@ -36,17 +38,17 @@ Copyright 2026 Wujie Sync. Licensed under the [Apache License 2.0](LICENSE).
 
 单页 Obsidian 社区插件管理器，中文名为“插件安装中心”。
 
-仓库名、包名和插件 ID 保持 `plugin-manager-cn`，插件显示名称为 `Wujie Hub`。
+仓库名、包名和插件 ID 保持 `wujie-hub`，插件显示名称为 `Wujie Hub`。
 
 ## 安装与使用
 
-1. 从 [Obsidian 社区页面](https://community.obsidian.md/plugins/plugin-manager-cn)安装，或从 [GitHub 最新发行版](https://github.com/adventurer2008/plugin-manager-cn/releases/latest)下载 `main.js`、`manifest.json`、`styles.css`。
-2. 手动安装时，将三个文件放入 `<配置目录>/plugins/plugin-manager-cn/`，配置目录通常是 `.obsidian`。仅替换这三个发行文件，保留已有 `data.json` 及其他文件。
+1. 本分支准备新 ID `wujie-hub`，社区迁移仍需管理员处理。测试时执行 `npm ci`、`npm run build`，使用 `dist/wujie-hub/` 中的三个文件。已发布的 0.1.16 仍是旧 ID `plugin-manager-cn`，不要把旧包放进新目录。
+2. 手动安装时，将三个文件放入 `<配置目录>/plugins/wujie-hub/`，配置目录通常是 `.obsidian`。仅替换这三个发行文件，保留已有 `data.json` 及其他文件。
 3. 在 Obsidian 第三方插件设置中启用 Wujie Hub，然后打开它的设置页面。也可使用“打开插件管理”命令。
 4. 搜索名称、描述或 ID，输入即筛选，点击“安装”确认版本后下载。已安装的搜索结果只显示状态，不提供启用或卸载功能。新装插件默认禁用，请到官方第三方插件设置中启用。更新保留原启用状态。
 5. “已安装插件”区仅显示“检查更新”按钮；检查后只列出有更新的插件，支持单独或全部加速更新。启用、禁用和卸载使用官方界面。批量操作跳过管理器自身和 `wujie-sync`。
 
-从源码构建需要 Node.js、npm 和 Python 3.9+；Python 用于 Alpha 清单发布工具的自动测试。执行 `npm ci`、`npm run check`、`npm test`、`npm run build`，然后按上述方式复制生成的 `dist/plugin-manager-cn` 文件夹，保留目标库已有的 `data.json`。
+从源码构建需要 Node.js、npm 和 Python 3.9+；Python 用于 Alpha 清单发布工具的自动测试。执行 `npm ci`、`npm run check`、`npm test`、`npm run build`，然后按上述方式复制生成的 `dist/wujie-hub` 文件夹，保留目标库已有的 `data.json`。
 
 默认卸载只移除发行文件，保留用户配置。安装、更新、卸载的发行文件备份保存在 `<配置目录>/pmcn-backups/`；备份是本机数据，不应上传或复制到其他设备。失败恢复也失败时，请停止继续安装，按提示找到快照恢复发行文件并重启。
 

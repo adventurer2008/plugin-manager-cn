@@ -1,11 +1,11 @@
 {
-  "pluginVersion": "0.1.16",
+  "pluginVersion": "0.1.17",
   "status": "deferred",
   "releaseAuthorization": {
-    "pluginVersion": "0.1.16",
+    "pluginVersion": "0.1.17",
     "date": "2026-10-29",
     "maintainerApproved": true,
-    "instruction": "你先发布，后面我统一测试；显示名改为Wujie Hub，跟这些一起发布"
+    "instruction": "你先发布，后面我统一测试；改名并一起发布；仓库名和插件ID统一改为wujie-hub"
   },
   "devices": []
 }

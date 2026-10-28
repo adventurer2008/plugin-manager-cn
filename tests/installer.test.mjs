@@ -52,7 +52,7 @@ function setup() {
     plugins,
     installer: new Installer(
       { vault: { adapter, configDir: ".obsidian" }, plugins },
-      "plugin-manager-cn",
+      "wujie-hub",
     ),
     fail: () => (fail = true),
   };
@@ -91,7 +91,7 @@ test("write failure restores original files and enabled state", async () => {
 test("self protection and identity mismatch reject before writes", async () => {
   const s = setup();
   await assert.rejects(
-    s.installer.install("plugin-manager-cn", bundle("1.0.0")),
+    s.installer.install("wujie-hub", bundle("1.0.0")),
     /自身/,
   );
   await assert.rejects(s.installer.install("other", bundle("1.0.0")), /不匹配/);
@@ -144,4 +144,28 @@ test("unknown platform plugin manager state stops before touching files", async 
     /接口不兼容/,
   );
   assert.equal(s.files.size, 1);
+});
+
+test("both manager identities are protected during ID migration", async () => {
+  const s = setup();
+  for (const id of ["wujie-hub", "plugin-manager-cn"]) {
+    await assert.rejects(
+      s.installer.install(id, bundle("1.0.0")),
+      /管理器自身/,
+    );
+    await assert.rejects(s.installer.uninstall(id), /管理器自身/);
+  }
+  assert.equal(s.files.size, 1);
+});
+
+test("a running legacy manager blocks new-manager mutations without unloading it", async () => {
+  const s = setup();
+  const legacy = {};
+  s.plugins.plugins["plugin-manager-cn"] = legacy;
+  await assert.rejects(
+    s.installer.install("demo", bundle("1.0.0")),
+    /停用旧版管理器/,
+  );
+  assert.equal(s.files.size, 1);
+  assert.equal(s.plugins.plugins["plugin-manager-cn"], legacy);
 });

@@ -1,5 +1,8 @@
 export const FILES = ["manifest.json", "main.js", "styles.css"] as const;
 export type Bundle = Record<string, string | null>;
+export function isManagerPlugin(id: string, ownId: string): boolean {
+  return id === ownId || id === "wujie-hub" || id === "plugin-manager-cn";
+}
 export function safeId(id: unknown): asserts id is string {
   if (typeof id !== "string" || !/^[a-z0-9][a-z0-9-]*$/.test(id))
     throw Error("插件 ID 不合法");

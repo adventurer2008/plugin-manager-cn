@@ -9,7 +9,7 @@ export default class Smoke extends Plugin {
   async run() {
     const results: string[] = [];
     try {
-      const i = new Installer(this.app, "plugin-manager-cn"),
+      const i = new Installer(this.app, "wujie-hub"),
         p = manager(this.app),
         a = this.app.vault.adapter;
       const make = (v: string, broken = false) => ({
@@ -67,7 +67,7 @@ export default class Smoke extends Plugin {
       );
       const s = (this.app as any).setting;
       s.open();
-      s.openTabById("plugin-manager-cn");
+      s.openTabById("wujie-hub");
       const n = new Network(),
         catalog = await n.catalog(),
         entry = catalog.find((e) => e.id === "templater-obsidian");

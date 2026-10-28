@@ -1,0 +1,8 @@
+{
+  "status": "pending",
+  "fromId": "plugin-manager-cn",
+  "toId": "wujie-hub",
+  "fromRepository": "adventurer2008/plugin-manager-cn",
+  "toRepository": "adventurer2008/wujie-hub",
+  "administratorConfirmation": null
+}

@@ -8,7 +8,7 @@ import {
   CompatibleSettingsTab,
   PortableSettingDefinition,
 } from "./compat";
-import { Bundle, compare, readBundle } from "./core";
+import { Bundle, compare, readBundle, isManagerPlugin } from "./core";
 import {
   WujieRelease,
   loadWujieReleases,
@@ -282,7 +282,7 @@ class Page extends CompatibleSettingsTab {
 
         if (installed) {
           const protectedPlugin =
-            e.id === this.pm.manifest.id || e.id === "wujie-sync";
+            isManagerPlugin(e.id, this.pm.manifest.id) || e.id === "wujie-sync";
           if (this.hasUpdate(installed) && !protectedPlugin)
             this.button(row, "加速更新", () => this.installCommunity(e));
           else
@@ -368,7 +368,7 @@ class Page extends CompatibleSettingsTab {
       let failures = 0;
       const targets = Object.values(p.manifests).filter(
         (m) =>
-          m.id !== this.pm.manifest.id &&
+          !isManagerPlugin(m.id, this.pm.manifest.id) &&
           m.id !== "wujie-sync" &&
           this.pm.state.catalog.some((e) => e.id === m.id),
       );
@@ -405,7 +405,7 @@ class Page extends CompatibleSettingsTab {
       if (failures) new Notice(failures + " 个插件未能查询版本，可稍后重试");
       const count = Object.values(p.manifests).filter(
         (m) =>
-          m.id !== this.pm.manifest.id &&
+          !isManagerPlugin(m.id, this.pm.manifest.id) &&
           m.id !== "wujie-sync" &&
           this.hasUpdate(m),
       ).length;
@@ -419,7 +419,7 @@ class Page extends CompatibleSettingsTab {
     });
     const updatable = Object.values(p.manifests).filter(
       (m) =>
-        m.id !== this.pm.manifest.id &&
+        !isManagerPlugin(m.id, this.pm.manifest.id) &&
         m.id !== "wujie-sync" &&
         this.hasUpdate(m),
     );
@@ -670,7 +670,7 @@ class Page extends CompatibleSettingsTab {
     }
   }
   async installCommunity(e: Entry) {
-    if (e.id === this.pm.manifest.id || e.id === "wujie-sync")
+    if (isManagerPlugin(e.id, this.pm.manifest.id) || e.id === "wujie-sync")
       throw Error("请使用对应专属管理方式");
     const m = await this.pm.net.latest(e.repo, undefined, true);
     if (

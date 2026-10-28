@@ -33,6 +33,7 @@ jobs:
       - run: npm run check
       - run: npm run check:compat
       - run: node scripts/check-platform-acceptance.mjs
+      - run: node scripts/check-community-migration.mjs
       - run: npm test
       - run: npm run build
       - name: Attest community release files

@@ -1,5 +1,16 @@
 # 开发记录
 
+## 2026-10-29 — 0.1.17 wujie-hub 仓库 / ID 迁移准备
+
+- GitHub仓库改为adventurer2008/wujie-hub，旧URL继续重定向；包名、候选插件ID、构建目录和文档统一为wujie-hub。
+- 新旧管理器ID均保护；旧管理器仍在运行时，新管理器拒绝修改插件文件。没有自动移动或删除旧目录、配置或回退快照。
+- 社区ID不可原地修改，需要官方管理员确认。main/社区保留0.1.16旧ID可用版本；迁移准备在独立分支，提供申请草稿和迁移说明，未虚构官方批准。
+
+## 2026-10-29 — 仓库改名（未发布）
+
+- GitHub 仓库由 adventurer2008/plugin-manager-cn 改名为 adventurer2008/wujie-hub，保留原仓库历史。
+- README 的 GitHub 发行版链接更新为新仓库地址；旧 GitHub 仓库 URL 跳转至新地址。本次文档调整尚未发布。
+
 ## 2026-10-29 — 0.1.16 Wujie Hub 合并发布
 
 - 插件显示名称由 Community Manager CN 改为 Wujie Hub，中文名为“插件安装中心”。

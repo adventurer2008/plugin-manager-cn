@@ -22,7 +22,7 @@ export default class WujieSmoke extends Plugin {
       const latest = releases.find((r) => r.version === "1.1.1"),
         older = releases.find((r) => r.version === "1.1.0");
       if (!latest || !older) throw Error("required real packages missing");
-      const installer = new Installer(this.app, "plugin-manager-cn");
+      const installer = new Installer(this.app, "wujie-hub");
       const b = await downloadWujie(net, latest);
       results.push("real-1.1.1-digest-verified");
       await installer.install("wujie-sync", b); // Never enable sync or copy another device identity.

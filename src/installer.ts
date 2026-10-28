@@ -1,5 +1,12 @@
 import { App, PluginManifest, Platform, requireApiVersion } from "obsidian";
-import { Bundle, FILES, readBundle, safeId, writeBundle } from "./core";
+import {
+  Bundle,
+  FILES,
+  readBundle,
+  safeId,
+  writeBundle,
+  isManagerPlugin,
+} from "./core";
 import { manager } from "./compat";
 export class Installer {
   busy = false;
@@ -9,6 +16,13 @@ export class Installer {
   ) {}
   async run<T>(action: () => Promise<T>) {
     if (this.busy) throw Error("已有操作正在进行");
+    if (
+      this.ownId === "wujie-hub" &&
+      manager(this.app).plugins["plugin-manager-cn"]
+    )
+      throw Error(
+        "请先在 Obsidian 官方插件设置中停用旧版管理器，避免两个管理器同时修改插件",
+      );
     this.busy = true;
     try {
       return await action();
@@ -18,7 +32,8 @@ export class Installer {
   }
   validate(id: string, b: Bundle, version?: string) {
     safeId(id);
-    if (id === this.ownId) throw Error("不能修改管理器自身");
+    if (isManagerPlugin(id, this.ownId))
+      throw Error("不能修改管理器自身或旧版管理器");
     const m = JSON.parse(b["manifest.json"] || "null") as PluginManifest;
     if (
       !m ||
@@ -76,7 +91,8 @@ export class Installer {
   async uninstall(id: string) {
     return this.run(async () => {
       safeId(id);
-      if (id === this.ownId) throw Error("不能卸载管理器自身");
+      if (isManagerPlugin(id, this.ownId))
+        throw Error("不能卸载管理器自身或旧版管理器");
       const p = manager(this.app),
         a = this.app.vault.adapter,
         dir = this.app.vault.configDir + "/plugins/" + id;
