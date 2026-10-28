@@ -31,6 +31,8 @@ jobs:
           test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
       - run: npm ci
       - run: npm run check
+      - run: npm run check:compat
+      - run: node scripts/check-platform-acceptance.mjs
       - run: npm test
       - run: npm run build
       - name: Attest community release files

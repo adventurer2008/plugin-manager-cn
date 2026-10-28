@@ -1,4 +1,4 @@
-# Community Manager CN — Windows MVP 0.1.14
+# Community Manager CN — 0.1.15 compatibility candidate
 
 ## Overview
 
@@ -26,7 +26,7 @@ Search terms are matched locally and are not uploaded as search parameters. Requ
 
 ## Compatibility and license
 
-Requires Obsidian **1.14.5 or later** and is marked **desktop-only**. Windows has been tested; macOS, Linux, Android, and iPadOS have not received real-device acceptance. Internal plugin-management APIs may change; unsupported interfaces stop the operation. Backups do not provide a transaction that survives every crash or forced shutdown.
+This candidate targets Obsidian **1.12.0 or later** on Windows, macOS, Linux, Android, and iOS/iPadOS. Mobile installation is enabled for acceptance testing, and desktop-only target plugins are rejected on mobile before any file mutation. It is not yet a verified all-platform release: real-device acceptance is pending. See [the acceptance checklist](docs/MOBILE-ACCEPTANCE.md). The previously verified Windows record belongs to earlier releases. Internal plugin-management APIs may change; unsupported interfaces stop the operation. Backups do not provide a transaction that survives every crash or forced shutdown.
 
 Copyright 2026 Wujie Sync. Licensed under the [Apache License 2.0](LICENSE).
 
@@ -84,7 +84,7 @@ Copyright 2026 Wujie Sync. Licensed under the [Apache License 2.0](LICENSE).
 - 社区目录来自官方目录，经加速通道下载，本地缓存支持断网后搜索。普通插件按 GitHub latest 正式 Release 安装，支持数字 `x.y.z` 标签；不支持非标准标签。
 - 社区发行文件尚未接入可信发布哈希，安装前要求确认信任来源；目前只能检查格式、ID、版本和最低应用版本。无界同步独立清单支持 SHA-256。
 - OSS 社区目录缓存和社区文件缓存需要后续接入。社区插件当前仍依赖公共加速源或直连；无界同步 Alpha 已接入下载站完整发布清单。
-- 最低 Obsidian 版本为 1.14.5，与已有 Windows 实机验证版本一致。Windows 为当前交付平台，manifest 标记 desktop-only；macOS/Linux 尚未实机验收，Android/iPadOS 尚未验收。
+- 本候选版目标最低 Obsidian 版本为 1.12.0，并开放移动端测试。已补齐 1.12 设置页回退路径、移动端窄屏布局和桌面专用插件拒绝规则；尚不能把自动测试视为所有平台实机验收通过。正式发布前完成 [移动端验收清单](docs/MOBILE-ACCEPTANCE.md)。
 - Obsidian 插件安装、启停、刷新使用内部插件管理接口，集中在 `src/compat.ts`，接口不兼容时停止操作。备份恢复并非断电事务；崩溃或强制退出后可能需要手动恢复。
 
 ## 网络服务与数据范围

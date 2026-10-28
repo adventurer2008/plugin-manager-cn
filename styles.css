@@ -138,4 +138,40 @@
 .pmcn-browser-summary[hidden] {
   display: none;
 }
-.pmcn-settings-root { display: block; padding: 0; border: 0; }
+.pmcn-settings-root {
+  display: block;
+  padding: 0;
+  border: 0;
+}
+
+@media (max-width: 600px) {
+  .pmcn-installed {
+    padding: 8px;
+  }
+  .pmcn-installed-row.setting-item,
+  .pmcn-update-controls.setting-item,
+  .pmcn-release-picker.setting-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pmcn-installed-row .setting-item-info,
+  .pmcn-release-picker .setting-item-info {
+    flex-basis: 100%;
+  }
+  .pmcn-installed-row .setting-item-control,
+  .pmcn-update-controls .setting-item-control,
+  .pmcn-release-picker .setting-item-control {
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .pmcn-release-picker select {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .pmcn-search-results {
+    max-height: 45vh;
+  }
+  .pmcn-settings-root button {
+    min-height: 36px;
+  }
+}

@@ -26,6 +26,25 @@ await build({
   ],
 });
 const { Page } = await import("../test-output/page.mjs");
+
+test("Obsidian 1.12 renders and refreshes without invoking the 1.13 API", async () => {
+  const page = Object.create(Page.prototype);
+  let renders = 0;
+  page.renderLegacy = () => renders++;
+  page.update = () => {
+    throw Error("1.13 API called on 1.12");
+  };
+  page.pm = { save: async () => {} };
+  globalThis.__pmcnLegacy = true;
+  try {
+    page.display();
+    await page.task(async () => {});
+    assert.equal(renders, 3);
+    assert.equal(page.working, false);
+  } finally {
+    delete globalThis.__pmcnLegacy;
+  }
+});
 test("declarative settings expose search terms and render the manager in one container", () => {
   const page = Object.create(Page.prototype);
   page.pm = { manifest: { name: "Community Manager CN" } };

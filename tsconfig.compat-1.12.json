@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": { "obsidian": ["./tests/fixtures/obsidian-1.12/obsidian.d.ts"] }
+  }
+}

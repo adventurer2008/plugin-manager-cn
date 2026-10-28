@@ -113,3 +113,35 @@ test("concurrent mutation is rejected", async () => {
   finish();
   await active;
 });
+
+test("mobile rejects desktop-only packages before any backup, unload or write", async () => {
+  const s = setup();
+  const before = new Map(s.files);
+  const desktop = bundle("1.0.0");
+  desktop["manifest.json"] = JSON.stringify({
+    ...JSON.parse(desktop["manifest.json"]),
+    isDesktopOnly: true,
+  });
+  globalThis.__pmcnMobile = true;
+  try {
+    await assert.rejects(s.installer.install("demo", desktop), /仅支持桌面端/);
+    assert.deepEqual(s.files, before);
+    await s.installer.install("demo", bundle("1.0.0"));
+    assert.equal(
+      s.files.get(".obsidian/plugins/demo/data.json"),
+      '{"identity":"keep-me"}',
+    );
+  } finally {
+    delete globalThis.__pmcnMobile;
+  }
+});
+
+test("unknown platform plugin manager state stops before touching files", async () => {
+  const s = setup();
+  s.plugins.enabledPlugins = [];
+  await assert.rejects(
+    s.installer.install("demo", bundle("1.0.0")),
+    /接口不兼容/,
+  );
+  assert.equal(s.files.size, 1);
+});

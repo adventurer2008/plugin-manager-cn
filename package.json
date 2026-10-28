@@ -7,9 +7,10 @@
     "typescript": "^7.0.2"
   },
   "name": "plugin-manager-cn",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "private": true,
   "scripts": {
+    "check:compat": "tsc --noEmit -p tsconfig.compat-1.12.json",
     "version:prepare": "node scripts/prepare-version.mjs",
     "build": "node build.mjs",
     "check": "tsc --noEmit",

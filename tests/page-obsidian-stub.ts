@@ -9,4 +9,5 @@ export class Notice {
 export const requestUrl = () => {
   throw Error("unexpected request");
 };
-export const requireApiVersion = () => true;
+export const requireApiVersion = () => !(globalThis as unknown as { __pmcnLegacy?: boolean }).__pmcnLegacy;
+export const Platform = { isMobile: false };

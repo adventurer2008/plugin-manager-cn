@@ -1,4 +1,4 @@
-import { App, PluginManifest, requireApiVersion } from "obsidian";
+import { App, PluginManifest, Platform, requireApiVersion } from "obsidian";
 import { Bundle, FILES, readBundle, safeId, writeBundle } from "./core";
 import { manager } from "./compat";
 export class Installer {
@@ -30,6 +30,8 @@ export class Installer {
       throw Error("插件 ID、版本或发行文件不匹配");
     if (!m.minAppVersion || !requireApiVersion(m.minAppVersion))
       throw Error("需要 Obsidian " + m.minAppVersion);
+    if (Platform.isMobile && m.isDesktopOnly)
+      throw Error("此插件仅支持桌面端，不能在移动设备上安装或更新");
     return m;
   }
   async install(id: string, b: Bundle, version?: string) {

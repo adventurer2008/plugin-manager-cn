@@ -1,17 +1,13 @@
-import {
-  Plugin,
-  PluginSettingTab,
-  Setting,
-  Notice,
-  Modal,
-  PluginManifest,
-  Menu,
-  SettingDefinitionItem,
-} from "obsidian";
+import { Plugin, Setting, Notice, Modal, PluginManifest, Menu } from "obsidian";
 import { Network, Entry } from "./network";
 import { record, manifestVersion } from "./json";
 import { Installer } from "./installer";
-import { manager, openPluginSettings } from "./compat";
+import {
+  manager,
+  openPluginSettings,
+  CompatibleSettingsTab,
+  PortableSettingDefinition,
+} from "./compat";
 import { Bundle, compare, readBundle } from "./core";
 import {
   WujieRelease,
@@ -92,7 +88,7 @@ export default class PM extends Plugin {
     );
   }
 }
-class Page extends PluginSettingTab {
+class Page extends CompatibleSettingsTab {
   query = "";
   updatesChecked = false;
   sortDescending = false;
@@ -130,7 +126,7 @@ class Page extends PluginSettingTab {
     if (this.working) return;
     this.working = true;
     this.status = "处理中…";
-    this.update();
+    this.refreshSettings();
     try {
       await fn();
       await this.pm.save();
@@ -140,7 +136,7 @@ class Page extends PluginSettingTab {
       new Notice(this.status, 10000);
     } finally {
       this.working = false;
-      this.update();
+      this.refreshSettings();
     }
   }
   button(s: Setting, label: string, fn: () => Promise<void>) {
@@ -151,7 +147,10 @@ class Page extends PluginSettingTab {
         .onClick(() => void this.task(fn)),
     );
   }
-  getSettingDefinitions(): SettingDefinitionItem[] {
+  renderLegacy(): void {
+    this.renderPage(this.containerEl);
+  }
+  getSettingDefinitions(): PortableSettingDefinition[] {
     return [
       {
         name: this.pm.manifest.name,
