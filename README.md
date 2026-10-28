@@ -1,4 +1,4 @@
-# Community Manager CN — Windows MVP 0.1.12
+# Community Manager CN — Windows MVP 0.1.13
 
 ## Overview
 

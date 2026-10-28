@@ -7,7 +7,7 @@
     "typescript": "^7.0.2"
   },
   "name": "plugin-manager-cn",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "private": true,
   "scripts": {
     "build": "node build.mjs",

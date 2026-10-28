@@ -154,7 +154,7 @@ class Page extends PluginSettingTab {
     if (opening) this.openGeneration++;
     const el = this.containerEl;
     el.empty();
-    el.createEl("h2", { text: this.pm.manifest.name });
+    new Setting(el).setName(this.pm.manifest.name).setHeading();
     if (this.status) el.createDiv({ cls: "pmcn-status", text: this.status });
 
     const p = manager(this.app);
