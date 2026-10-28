@@ -1,4 +1,34 @@
-# Community Manager CN — Windows MVP 0.1.11
+# Community Manager CN — Windows MVP 0.1.12
+
+## Overview
+
+Community Manager CN searches, installs, and updates Obsidian community plugins through GitHub download mirrors. Its single settings page also provides a dedicated Wujie Sync section for selecting stable and Alpha releases, checking SHA-256 digests, and restoring a local code version that the user has explicitly confirmed as working. The interface is in Chinese. The plugin ID and installation folder are `plugin-manager-cn`.
+
+## Installation and usage
+
+1. Download `plugin-manager-cn.zip` from the [latest GitHub release](https://github.com/adventurer2008/plugin-manager-cn/releases/latest) and extract it.
+2. Copy the extracted `plugin-manager-cn` folder into your vault's `<config-dir>/plugins/` folder, normally `.obsidian/plugins/`. The result should include `.obsidian/plugins/plugin-manager-cn/manifest.json`. Preserve any existing `data.json` when replacing release files.
+3. In Obsidian, open **Settings → Community plugins**, enable **Community Manager CN**, and open its settings page. You can also run the **打开插件管理** command (Open plugin manager).
+4. Enter a plugin name, description, or ID in the search field. Select **安装** (Install), review the version and trust prompt, and confirm the download. New plugins remain disabled until you enable them in Obsidian's Community plugins settings.
+5. Select **检查更新** (Check for updates) beside **已安装插件** (Installed plugins). Update an individual result with **加速更新** (Update through mirrors), or use **全部加速更新** (Update all through mirrors). Updates preserve each plugin's enabled state and configuration. The manager itself and Wujie Sync are excluded from ordinary updates.
+6. In the Wujie Sync section, select **检查更新**, choose a version, then **安装所选版本** (Install selected version). To save a rollback target, use the more menu and **标记当前版本正常** (Mark current version as working) only after testing that version yourself. The rollback button restores code, preserving current configuration; it cannot undo configuration or remote data migrations.
+
+The manager changes only `manifest.json`, `main.js`, and `styles.css` in target plugins, with local release-file backups under `<config-dir>/pmcn-backups/`. Use Obsidian's own settings to enable, disable, or uninstall plugins. See the Chinese instructions below for recovery details and the source-build workflow.
+
+## Network and privacy
+
+- `raw.githubusercontent.com` supplies the official community plugin directory and plugin manifests; `api.github.com` supplies release metadata and available file digests; `github.com` supplies release downloads and may redirect them to GitHub's file distribution services.
+- Third-party proxies `ghfast.top`, `gh-proxy.com`, `gh.llkk.cc`, `ghproxy.net`, `gh.monlor.com`, and `wget.la` relay GitHub requests to improve access from China. Metadata checks try some sources in parallel; file downloads switch sources after failures. Proxies can see the GitHub URLs they relay. Ordinary community downloads do not have independently trusted publisher hashes; install only plugins and sources you trust. A matching Wujie digest establishes consistency with its metadata, not an author signature.
+- `sync.wujiesync.cc` supplies the Wujie Sync Alpha feed. Opening this plugin's settings page automatically refreshes that feed; manual update checks also request it. Release files are downloaded after confirmation.
+- An optional custom HTTPS `feedUrl` supplies Wujie release metadata when configured. Confirmed installs request the HTTPS file URLs specified by that feed.
+
+Search terms are matched locally and are not uploaded as search parameters. Request URLs identify the requested repository, version, or file; remote services receive the request IP address and ordinary HTTP headers. This plugin requests catalogs, metadata, and release files. It does not upload notes, attachments, plugin settings, `data.json`, or rollback backups. Its cache, configuration, and backups remain local. The manager requires no account or payment; installed plugins have their own requirements and policies.
+
+## Compatibility and license
+
+Requires Obsidian **1.14.5 or later** and is marked **desktop-only**. Windows has been tested; macOS, Linux, Android, and iPadOS have not received real-device acceptance. Internal plugin-management APIs may change; unsupported interfaces stop the operation. Backups do not provide a transaction that survives every crash or forced shutdown.
+
+Copyright 2026 Wujie Sync. Licensed under the [Apache License 2.0](LICENSE).
 
 单页 Obsidian 社区插件管理器。
 
