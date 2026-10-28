@@ -1,0 +1,103 @@
+{
+  "at": "2026-10-28T11:44:21.870Z",
+  "count": 24,
+  "elapsedMs": 3647,
+  "results": [
+    {
+      "id": "chinabrat",
+      "version": "1.0.1"
+    },
+    {
+      "id": "easy-sync",
+      "version": "1.6.3"
+    },
+    {
+      "id": "custom-sort",
+      "version": "3.2.0"
+    },
+    {
+      "id": "easy-typing-obsidian",
+      "version": "6.0.9"
+    },
+    {
+      "id": "dataview",
+      "version": "0.5.68"
+    },
+    {
+      "id": "metaedit",
+      "version": "1.11.0"
+    },
+    {
+      "id": "meld-encrypt",
+      "version": "3.1.1"
+    },
+    {
+      "id": "obsidian-auto-link-title",
+      "version": "1.5.5"
+    },
+    {
+      "id": "obsidian-linter",
+      "version": "1.34.2"
+    },
+    {
+      "id": "obsidian-importer",
+      "version": "3.1.16"
+    },
+    {
+      "id": "obsidian-enhancing-export",
+      "version": "1.11.3"
+    },
+    {
+      "id": "obsidian-outliner",
+      "version": "4.10.2"
+    },
+    {
+      "id": "obsidian42-brat",
+      "version": "2.2.0"
+    },
+    {
+      "id": "ocr-extractor",
+      "version": "2.4.2"
+    },
+    {
+      "id": "omnisearch",
+      "version": "1.32.0"
+    },
+    {
+      "id": "open-in-new-tab",
+      "version": "1.0.9"
+    },
+    {
+      "id": "openplug",
+      "version": "0.3.9"
+    },
+    {
+      "id": "oz-clear-unused-images",
+      "version": "1.1.1"
+    },
+    {
+      "id": "recent-files-obsidian",
+      "version": "1.7.10"
+    },
+    {
+      "id": "shoujidiannao-absyw",
+      "version": "2.9.1"
+    },
+    {
+      "id": "synch",
+      "version": "0.5.5"
+    },
+    {
+      "id": "templater-obsidian",
+      "version": "2.26.0"
+    },
+    {
+      "id": "tray",
+      "version": "0.3.5"
+    },
+    {
+      "id": "wucai-highlights-official",
+      "version": "26.4.11"
+    }
+  ]
+}

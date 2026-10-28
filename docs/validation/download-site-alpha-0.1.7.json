@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "feed": "https://sync.wujiesync.cc/download/alpha/latest.json",
+  "alpha": "1.1.2-alpha.1",
+  "results": [
+    "real-download-site-alpha-1.1.2-alpha.1",
+    "real-alpha-all-digests-verified",
+    "real-alpha-installed-disabled",
+    "offline-confirmed-snapshot-rollback",
+    "config-preserved"
+  ],
+  "syncPluginEnabled": false
+}

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-28",
+  "vault": "本地测试库",
+  "version": "0.1.8",
+  "separateLatestAlphaButton": false,
+  "historyDescription": false,
+  "groups": [
+    {
+      "label": "Alpha 测试版",
+      "max": 3,
+      "observed": [
+        "1.1.2-alpha.1"
+      ]
+    },
+    {
+      "label": "稳定版",
+      "max": 5,
+      "observed": [
+        "1.1.1",
+        "1.1.0",
+        "1.0.11",
+        "1.0.10",
+        "1.0.9"
+      ]
+    }
+  ],
+  "sharedInstallButton": true,
+  "rollbackTargetPreserved": "1.1.0",
+  "targetPluginChanged": false
+}

@@ -1,0 +1,71 @@
+{
+  "checkedAt": "2026-10-28",
+  "source": "https://api.github.com/repos/adventurer2008/obsidian-smart-sync-release-cn/releases",
+  "releases": [
+    {
+      "version": "1.1.1",
+      "channel": "Stable",
+      "baseUrl": "https://github.com/adventurer2008/obsidian-smart-sync-release-cn/releases/download/1.1.1/",
+      "sha256": {
+        "manifest.json": "0636f3aacf276b6f61068d85940b61e3b3afffa2d8849b148442d66cee04e548",
+        "main.js": "31d7b23055fbd2c07ef5b2cf985bedcb024b2ae146091fba7d0c47fe7db6afd6",
+        "styles.css": "1f906fc9c674cb6ebd5bfe697860bada7c3363473b35eb3408362c1029f19586"
+      },
+      "rollbackSafe": false,
+      "publishedAt": "2026-10-28T04:11:49Z",
+      "fromGithub": true
+    },
+    {
+      "version": "1.1.0",
+      "channel": "Stable",
+      "baseUrl": "https://github.com/adventurer2008/obsidian-smart-sync-release-cn/releases/download/1.1.0/",
+      "sha256": {
+        "manifest.json": "944564db51a7a33d199fd1243fde4abdf14cb33fb3532d6f16c09488e6ba3e0a",
+        "main.js": "46c48de068f5dadf9c267ce31ae0eb118cbebe4308b603ff2f2acf1222e0b512",
+        "styles.css": "23c164eccf448357448fe39cc3b620aa4a4967640ccca9fc457dbe7ae03059c6"
+      },
+      "rollbackSafe": false,
+      "publishedAt": "2026-10-28T00:06:42Z",
+      "fromGithub": true
+    },
+    {
+      "version": "1.0.11",
+      "channel": "Stable",
+      "baseUrl": "https://github.com/adventurer2008/obsidian-smart-sync-release-cn/releases/download/1.0.11/",
+      "sha256": {
+        "manifest.json": "a2b56a7c3b4a475184c8d5437c7a8a4349aa6fdf3fdb151bff2842cca2fa9fcc",
+        "main.js": "713e39996fd99e76fee3523fae84058d4f231f17e06ffbd21171385439d8eb64",
+        "styles.css": "6d23a66364f601182c0495f8510373c93923a865074b4d9fd1af995447ffb182"
+      },
+      "rollbackSafe": false,
+      "publishedAt": "2026-10-27T15:28:57Z",
+      "fromGithub": true
+    },
+    {
+      "version": "1.0.10",
+      "channel": "Stable",
+      "baseUrl": "https://github.com/adventurer2008/obsidian-smart-sync-release-cn/releases/download/1.0.10/",
+      "sha256": {
+        "manifest.json": "3db6df1829de8b316b79a6b5b12122a62398dce56b09d6c1760772cd0716e746",
+        "main.js": "461a7f2c3ec4390ea9d6a32e518af58c8fde7f091c4a54d2f42a231323aa587a",
+        "styles.css": "90339b21831b151767e5733474bebdaaac76940ff44550e6975b655961ad0aee"
+      },
+      "rollbackSafe": false,
+      "publishedAt": "2026-10-27T14:29:48Z",
+      "fromGithub": true
+    },
+    {
+      "version": "1.0.9",
+      "channel": "Stable",
+      "baseUrl": "https://github.com/adventurer2008/obsidian-smart-sync-release-cn/releases/download/1.0.9/",
+      "sha256": {
+        "manifest.json": "ab882dc0748642facc6b09369df5e6b080dbf4258e9d30438b56b566d226c688",
+        "main.js": "4aa283787d85625d9003cb33774070ce9e4d2413143f61abcee167e9ef215c4d",
+        "styles.css": "6efad05db89bc0ea5dcdfa29f7da2f0bfe63de76725426f1bcc6ce84135f4d08"
+      },
+      "rollbackSafe": false,
+      "publishedAt": "2026-10-27T13:09:56Z",
+      "fromGithub": true
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "results": [
+    "fresh-install",
+    "enable",
+    "enabled-update",
+    "failed-load-recovery",
+    "rollback",
+    "config-preserved",
+    "uninstall",
+    "real-catalog",
+    "real-release-download-2.26.0",
+    "real-community-install-disabled"
+  ],
+  "mirror": "https://ghfast.top/"
+}

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+main.js
+test-output/
+.env
+.env.*
+data.json
+*.pem
+*.key
+__pycache__/
+*.pyc

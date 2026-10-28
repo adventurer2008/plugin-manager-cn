@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-28",
+  "vault": "本地测试库",
+  "managerVersion": "0.1.6",
+  "reload": true,
+  "uiResult": "已读取 25 个版本，暂无已发布 Alpha",
+  "historyDropdown": "Stable · 1.1.1",
+  "historyInstallButton": true,
+  "test3TargetPluginInstalledOrDowngraded": false,
+  "userBaselineMarked": false,
+  "independentSmoke": "wujie-history-rollback-0.1.6.json",
+  "alphaValidation": "Synthetic channel/tag tests only; no real Alpha is published"
+}

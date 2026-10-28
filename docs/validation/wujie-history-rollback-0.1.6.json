@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "results": [
+    "release-index-25",
+    "real-1.1.1-digest-verified",
+    "local-baseline-snapshot",
+    "real-history-1.1.0-installed",
+    "offline-snapshot-rollback-1.1.1",
+    "config-preserved"
+  ],
+  "alphaCount": 0,
+  "enabled": false
+}

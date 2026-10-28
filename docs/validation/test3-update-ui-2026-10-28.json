@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-28",
+  "timezone": "Asia/Shanghai",
+  "vault": "本地测试库",
+  "managerFilesVersion": "0.1.5",
+  "reload": "Disabled and enabled Plugin Manager CN through official Obsidian settings",
+  "ordinary": {
+    "result": "已安装插件暂无更新",
+    "firstCompletionObservedWithinMs": 11227,
+    "cachedCompletionObservedWithinMs": 761
+  },
+  "wujie": {
+    "result": "无界同步已是最新正式版（1.1.1）",
+    "completionObservedWithinMs": 1048,
+    "feedUrlError": false
+  },
+  "scope": "UI checks only; did not install or update any target plugin",
+  "timingNote": "Observation upper bounds including UI automation and deliberate observation delays; not exact request durations"
+}
