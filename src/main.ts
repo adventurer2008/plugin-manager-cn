@@ -9,7 +9,7 @@ import {
 } from "obsidian";
 import { Network, Entry } from "./network";
 import { Installer } from "./installer";
-import { manager } from "./compat";
+import { manager, openPluginSettings } from "./compat";
 import { Bundle, compare, readBundle } from "./core";
 import {
   WujieRelease,
@@ -71,13 +71,11 @@ export default class PM extends Plugin {
       id: "open-manager",
       name: "打开插件管理",
       callback: () => {
-        const s = (
-          this.app as unknown as {
-            setting: { open(): void; openTabById(id: string): void };
-          }
-        ).setting;
-        s.open();
-        s.openTabById(this.manifest.id);
+        try {
+          openPluginSettings(this.app, this.manifest.id);
+        } catch (error) {
+          new Notice(String(error));
+        }
       },
     });
   }

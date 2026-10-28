@@ -21,3 +21,18 @@ export function manager(app: App): Manager {
       throw Error("此 Obsidian 版本的插件管理接口不兼容");
   return p;
 }
+
+export function openPluginSettings(app: App, id: string): void {
+  const setting = (
+    app as unknown as {
+      setting?: { open(): void; openTabById(id: string): void };
+    }
+  ).setting;
+  if (
+    typeof setting?.open !== "function" ||
+    typeof setting.openTabById !== "function"
+  )
+    throw Error("此 Obsidian 版本的设置接口不兼容");
+  setting.open();
+  setting.openTabById(id);
+}

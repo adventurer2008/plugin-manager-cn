@@ -1,4 +1,4 @@
-# Community Manager CN — Windows MVP 0.1.10
+# Community Manager CN — Windows MVP 0.1.11
 
 单页 Obsidian 社区插件管理器。
 
@@ -54,8 +54,21 @@
 - 社区目录来自官方目录，经加速通道下载，本地缓存支持断网后搜索。普通插件按 GitHub latest 正式 Release 安装，支持数字 `x.y.z` 标签；不支持非标准标签。
 - 社区发行文件尚未接入可信发布哈希，安装前要求确认信任来源；目前只能检查格式、ID、版本和最低应用版本。无界同步独立清单支持 SHA-256。
 - OSS 社区目录缓存和社区文件缓存需要后续接入。社区插件当前仍依赖公共加速源或直连；无界同步 Alpha 已接入下载站完整发布清单。
-- Windows 为当前交付平台，manifest 标记 desktop-only。Android/iPadOS 尚未验收。
+- 最低 Obsidian 版本为 1.14.5，与已有 Windows 实机验证版本一致。Windows 为当前交付平台，manifest 标记 desktop-only；macOS/Linux 尚未实机验收，Android/iPadOS 尚未验收。
 - Obsidian 插件安装、启停、刷新使用内部插件管理接口，集中在 `src/compat.ts`，接口不兼容时停止操作。备份恢复并非断电事务；崩溃或强制退出后可能需要手动恢复。
+
+## 网络服务与数据范围
+
+插件使用以下远程服务获取社区目录、版本信息和发行文件：
+
+- `raw.githubusercontent.com`：读取 Obsidian 官方社区插件目录，以及需要查询的插件 manifest。
+- `api.github.com`：查询社区插件的最新正式 Release，以及无界同步国内发行仓库的历史 Release 和文件摘要。
+- `github.com`：下载用户选择的插件发行文件；GitHub 可能将下载重定向至其文件分发服务。
+- 第三方 GitHub 加速代理 `ghfast.top`、`gh-proxy.com`、`gh.llkk.cc`、`ghproxy.net`、`gh.monlor.com`、`wget.la`：转发上述 GitHub 请求，以改善国内访问。版本查询会并行尝试部分来源，文件下载按来源失败切换。代理可看到所转发的 GitHub 地址；文件摘要一致不等同于作者签名。
+- `sync.wujiesync.cc`：每次打开本插件设置页时自动读取无界同步 Alpha 完整发布清单，手动检查更新也会读取；确认安装后下载该清单所列发行文件。
+- 可选的自定义 HTTPS `feedUrl`：配置后用于获取无界同步版本清单；确认安装后会请求清单指定的 HTTPS 文件地址。这些地址由清单提供方决定。
+
+搜索关键词在本机匹配，不作为搜索参数上传。请求的 URL 包含所查询的仓库、版本或文件路径，服务提供方可以接收到请求 IP 和常规 HTTP 请求头。当前代码只请求目录、版本元数据及发行文件，不上传笔记、附件、插件配置、`data.json` 或本机回退备份；缓存、配置和备份保存在本机。管理器不要求账号或付费；被安装插件自身的网络、账号和付费要求由对应插件说明。
 
 ## 验证
 
@@ -74,3 +87,7 @@
 后续发布Alpha使用 scripts/publish-alpha.ps1，传入 PackageDirectory（三个插件发行文件所在目录）、RootTarget、IdentityFile。脚本自动生成版本信息和摘要、上传独立版本目录、执行服务端 scripts/update-alpha-index.py 更新完整清单。已发布版本不可覆盖；正式版入口、应用服务和用户配置不变。也可在完成目录上传后执行服务端更新工具。上传与清单更新需要发布账号及root维护权限，脚本不保存密钥。
 
 0.1.10：每次进入设置页面自动后台读取下载站Alpha并更新下拉，打开时不查GitHub；无界同步的检查更新按钮同时刷新Alpha和稳定版。读取失败保留上次结果并提示。
+
+## 许可证
+
+Copyright 2026 Wujie Sync. 本项目采用 [Apache License 2.0](LICENSE)。
