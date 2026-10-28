@@ -138,3 +138,4 @@
 .pmcn-browser-summary[hidden] {
   display: none;
 }
+.pmcn-settings-root { display: block; padding: 0; border: 0; }

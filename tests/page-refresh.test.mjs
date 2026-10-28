@@ -26,6 +26,31 @@ await build({
   ],
 });
 const { Page } = await import("../test-output/page.mjs");
+test("declarative settings expose search terms and render the manager in one container", () => {
+  const page = Object.create(Page.prototype);
+  page.pm = { manifest: { name: "Community Manager CN" } };
+  let rendered;
+  page.renderPage = (el) => {
+    rendered = el;
+  };
+  const [definition] = page.getSettingDefinitions();
+  assert.ok(definition.aliases.includes("回退"));
+  const root = { empty() {}, addClass() {} };
+  definition.render({ settingEl: root });
+  assert.equal(rendered, root);
+});
+test("failed operations refresh through the settings API and release the UI lock", async () => {
+  const page = Object.create(Page.prototype);
+  let refreshes = 0;
+  page.update = () => refreshes++;
+  page.pm = { save: async () => {} };
+  await page.task(async () => {
+    throw Error("failed installation");
+  });
+  assert.equal(page.working, false);
+  assert.match(page.status, /failed installation/);
+  assert.equal(refreshes, 2);
+});
 function fixture() {
   const p = Object.create(Page.prototype);
   let saves = 0,

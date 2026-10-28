@@ -67,12 +67,15 @@ export class Network {
     try {
       return await Promise.any(
         prefixes.map(async (prefix) => {
-          let timer: ReturnType<typeof setTimeout> | undefined;
+          let timer: number | undefined;
           try {
             const response = await Promise.race([
               requestUrl({ url: prefix + url, throw: false }),
               new Promise<never>((_, reject) => {
-                timer = setTimeout(() => reject(Error("版本查询超时")), 4500);
+                timer = window.setTimeout(
+                  () => reject(Error("版本查询超时")),
+                  4500,
+                );
               }),
             ]);
             if (response.status !== 200) throw Error("HTTP " + response.status);
@@ -80,7 +83,7 @@ export class Network {
             if (prefix) this.last = prefix;
             return value;
           } finally {
-            clearTimeout(timer);
+            window.clearTimeout(timer);
           }
         }),
       );
@@ -106,13 +109,13 @@ export class Network {
     const errors: string[] = [];
     for (const u of urls) {
       try {
-        let timer: ReturnType<typeof setTimeout> | undefined;
+        let timer: number | undefined;
         const r = await Promise.race([
           requestUrl({ url: u, throw: false }),
           new Promise<never>((_, reject) => {
-            timer = setTimeout(() => reject(Error("超时")), 12000);
+            timer = window.setTimeout(() => reject(Error("超时")), 12000);
           }),
-        ]).finally(() => clearTimeout(timer));
+        ]).finally(() => window.clearTimeout(timer));
         if (r.status !== 200) throw Error("HTTP " + r.status);
         if (r.text.length > 20_000_000) throw Error("文件过大");
         validate(r.text);
@@ -129,7 +132,7 @@ export class Network {
       await this.get(url, (s) => {
         JSON.parse(s);
       }),
-    );
+    ) as T;
   }
   async catalog(): Promise<Entry[]> {
     const data = await this.json<Entry[]>(

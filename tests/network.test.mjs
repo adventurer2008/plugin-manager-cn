@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { build } from "esbuild";
+globalThis.window = globalThis;
 await build({
   entryPoints: ["src/network.ts"],
   outfile: "test-output/network.mjs",

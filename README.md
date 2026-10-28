@@ -1,4 +1,4 @@
-# Community Manager CN — Windows MVP 0.1.13
+# Community Manager CN — Windows MVP 0.1.14
 
 ## Overview
 
@@ -6,8 +6,8 @@ Community Manager CN searches, installs, and updates Obsidian community plugins 
 
 ## Installation and usage
 
-1. Download `plugin-manager-cn.zip` from the [latest GitHub release](https://github.com/adventurer2008/plugin-manager-cn/releases/latest) and extract it.
-2. Copy the extracted `plugin-manager-cn` folder into your vault's `<config-dir>/plugins/` folder, normally `.obsidian/plugins/`. The result should include `.obsidian/plugins/plugin-manager-cn/manifest.json`. Preserve any existing `data.json` when replacing release files.
+1. Install from the [Obsidian Community listing](https://community.obsidian.md/plugins/plugin-manager-cn), or download `main.js`, `manifest.json`, and `styles.css` from the [latest GitHub release](https://github.com/adventurer2008/plugin-manager-cn/releases/latest).
+2. For manual installation, place those three files in `<config-dir>/plugins/plugin-manager-cn/`, normally `.obsidian/plugins/plugin-manager-cn/`. Preserve any existing `data.json` and all other files when replacing release files.
 3. In Obsidian, open **Settings → Community plugins**, enable **Community Manager CN**, and open its settings page. You can also run the **打开插件管理** command (Open plugin manager).
 4. Enter a plugin name, description, or ID in the search field. Select **安装** (Install), review the version and trust prompt, and confirm the download. New plugins remain disabled until you enable them in Obsidian's Community plugins settings.
 5. Select **检查更新** (Check for updates) beside **已安装插件** (Installed plugins). Update an individual result with **加速更新** (Update through mirrors), or use **全部加速更新** (Update all through mirrors). Updates preserve each plugin's enabled state and configuration. The manager itself and Wujie Sync are excluded from ordinary updates.
@@ -36,8 +36,8 @@ Copyright 2026 Wujie Sync. Licensed under the [Apache License 2.0](LICENSE).
 
 ## 安装与使用
 
-1. 从 [GitHub 最新发行版](https://github.com/adventurer2008/plugin-manager-cn/releases/latest)下载 `plugin-manager-cn.zip`。
-2. 解压，将其中的 `plugin-manager-cn` 文件夹复制到目标库的 `<配置目录>/plugins/`。通常配置目录是 `.obsidian`，安装后应能找到 `<配置目录>/plugins/plugin-manager-cn/manifest.json`。不要覆盖任何已有的 `data.json`。
+1. 从 [Obsidian 社区页面](https://community.obsidian.md/plugins/plugin-manager-cn)安装，或从 [GitHub 最新发行版](https://github.com/adventurer2008/plugin-manager-cn/releases/latest)下载 `main.js`、`manifest.json`、`styles.css`。
+2. 手动安装时，将三个文件放入 `<配置目录>/plugins/plugin-manager-cn/`，配置目录通常是 `.obsidian`。仅替换这三个发行文件，保留已有 `data.json` 及其他文件。
 3. 在 Obsidian 第三方插件设置中启用 Community Manager CN，然后打开它的设置页面。也可使用“打开插件管理”命令。
 4. 搜索名称、描述或 ID，输入即筛选，点击“安装”确认版本后下载。已安装的搜索结果只显示状态，不提供启用或卸载功能。新装插件默认禁用，请到官方第三方插件设置中启用。更新保留原启用状态。
 5. “已安装插件”区仅显示“检查更新”按钮；检查后只列出有更新的插件，支持单独或全部加速更新。启用、禁用和卸载使用官方界面。批量操作跳过管理器自身和 `wujie-sync`。

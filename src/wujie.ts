@@ -1,6 +1,7 @@
 import historyCache from "./wujie-history.json";
 import { Bundle, FILES } from "./core";
 import { Network } from "./network";
+import { record } from "./json";
 export const WUJIE_REPO = "adventurer2008/obsidian-smart-sync-release-cn";
 export const WUJIE_DOWNLOAD_SITE = "https://sync.wujiesync.cc/download/";
 export const WUJIE_ALPHA_FEED = new URL(
@@ -32,7 +33,7 @@ export function parseSiteFeed(
   value: unknown,
   metadataUrl: string,
 ): WujieRelease[] {
-  const feed = value as Record<string, any>;
+  const feed = record(value);
   if (feed?.pluginId && feed.pluginId !== "wujie-sync")
     throw Error("Alpha清单插件ID不匹配");
   const entries = Array.isArray(feed?.releases)
@@ -42,7 +43,8 @@ export function parseSiteFeed(
       : feed?.version
         ? [feed]
         : [];
-  return entries.flatMap((entry: Record<string, any>) => {
+  return entries.flatMap((value: unknown): WujieRelease[] => {
+    const entry = record(value);
     const version = entry.version;
     if (
       typeof version !== "string" ||
@@ -50,23 +52,30 @@ export function parseSiteFeed(
       (entry.id && entry.id !== "wujie-sync")
     )
       return [];
-    const channel = /alpha/i.test(version + " " + entry.channel)
+    const label =
+      version + " " + (typeof entry.channel === "string" ? entry.channel : "");
+    const channel = /alpha/i.test(label)
       ? "Alpha"
-      : /beta/i.test(version + " " + entry.channel)
+      : /beta/i.test(label)
         ? "Beta"
         : null;
     if (!channel) return [];
     const baseUrl = new URL(
-      entry.baseUrl || entry.base_url || "./",
+      typeof entry.baseUrl === "string"
+        ? entry.baseUrl
+        : typeof entry.base_url === "string"
+          ? entry.base_url
+          : "./",
       metadataUrl,
     ).href;
     const sha256: Record<string, string> = {},
       fileUrls: Record<string, string> = {};
     for (const file of FILES) {
-      const item = entry.files?.[file];
+      const item = record(entry.files)[file];
+      const fileItem = record(item);
       const digest =
-        entry.sha256?.[file] ||
-        (typeof item === "string" ? item : item?.sha256);
+        record(entry.sha256)[file] ||
+        (typeof item === "string" ? item : fileItem.sha256);
       if (!digest) {
         if (file === "styles.css" && !item) continue;
         return [];
@@ -78,12 +87,14 @@ export function parseSiteFeed(
         return [];
       sha256[file] = digest.replace(/^sha256:/i, "").toLowerCase();
       const url = new URL(
-        typeof item === "object" && item.url ? item.url : file,
+        typeof fileItem.url === "string" ? fileItem.url : file,
         baseUrl,
       );
       if (url.protocol !== "https:") return [];
       fileUrls[file] = url.href;
     }
+    const publishedAt =
+      entry.publishedAt || entry.published_at || entry.releasedAt;
     return [
       {
         version,
@@ -92,9 +103,8 @@ export function parseSiteFeed(
         sha256,
         fileUrls,
         rollbackSafe: entry.rollbackSafe === true,
-        publishedAt:
-          entry.publishedAt || entry.published_at || entry.releasedAt,
-      } as WujieRelease,
+        publishedAt: typeof publishedAt === "string" ? publishedAt : undefined,
+      },
     ];
   });
 }
@@ -118,7 +128,7 @@ export function parseReleases(items: GithubRelease[]): WujieRelease[] {
     .filter(
       (r) => !r.draft && /^(v)?\d+\.\d+\.\d+(?:-[\w.-]+)?$/.test(r.tag_name),
     )
-    .flatMap((r) => {
+    .flatMap((r): WujieRelease[] => {
       const sha256: Record<string, string> = {};
       for (const file of FILES) {
         const a = r.assets?.find((a) => a.name === file);
@@ -149,7 +159,7 @@ export function parseReleases(items: GithubRelease[]): WujieRelease[] {
           rollbackSafe: false,
           publishedAt: r.published_at,
           fromGithub: true,
-        } as WujieRelease,
+        },
       ];
     })
     .sort(
@@ -239,7 +249,7 @@ export async function downloadWujie(
     );
   }
   await verifyBundle(b, release.sha256);
-  const manifest = JSON.parse(b["manifest.json"] || "null");
+  const manifest = record(JSON.parse(b["manifest.json"] || "null") as unknown);
   const expected = release.version.replace(/^v/, "");
   if (
     manifest?.id !== "wujie-sync" ||

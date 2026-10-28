@@ -6,8 +6,10 @@ import {
   Modal,
   PluginManifest,
   Menu,
+  SettingDefinitionItem,
 } from "obsidian";
 import { Network, Entry } from "./network";
+import { record, manifestVersion } from "./json";
 import { Installer } from "./installer";
 import { manager, openPluginSettings } from "./compat";
 import { Bundle, compare, readBundle } from "./core";
@@ -63,7 +65,8 @@ export default class PM extends Plugin {
   net = new Network();
   installer!: Installer;
   async onload() {
-    this.state = { ...this.state, ...(await this.loadData()) };
+    const saved: unknown = await this.loadData();
+    this.state = { ...this.state, ...record(saved) };
     this.net.last = this.state.lastMirror;
     this.installer = new Installer(this.app, this.manifest.id);
     this.addSettingTab(new Page(this));
@@ -127,7 +130,7 @@ class Page extends PluginSettingTab {
     if (this.working) return;
     this.working = true;
     this.status = "处理中…";
-    this.display();
+    this.update();
     try {
       await fn();
       await this.pm.save();
@@ -137,7 +140,7 @@ class Page extends PluginSettingTab {
       new Notice(this.status, 10000);
     } finally {
       this.working = false;
-      this.display();
+      this.update();
     }
   }
   button(s: Setting, label: string, fn: () => Promise<void>) {
@@ -148,11 +151,24 @@ class Page extends PluginSettingTab {
         .onClick(() => void this.task(fn)),
     );
   }
-  display() {
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    return [
+      {
+        name: this.pm.manifest.name,
+        desc: "搜索社区插件、检查已安装插件更新、无界同步版本与回退",
+        aliases: ["安装", "更新", "无界同步", "Alpha", "回退"],
+        render: (setting) => {
+          setting.settingEl.empty();
+          setting.settingEl.addClass("pmcn-settings-root");
+          this.renderPage(setting.settingEl);
+        },
+      },
+    ];
+  }
+  renderPage(el: HTMLElement) {
     const opening = !this.pageVisible;
     this.pageVisible = true;
     if (opening) this.openGeneration++;
-    const el = this.containerEl;
     el.empty();
     new Setting(el).setName(this.pm.manifest.name).setHeading();
     if (this.status) el.createDiv({ cls: "pmcn-status", text: this.status });
@@ -469,18 +485,18 @@ class Page extends PluginSettingTab {
       if (this.pm.state.verified) {
         let version = "已确认版本";
         try {
-          version = JSON.parse(
-            this.pm.state.verified["manifest.json"]!,
-          ).version;
-        } catch {}
+          version = manifestVersion(this.pm.state.verified["manifest.json"]!);
+        } catch {
+          version = "无效快照";
+        }
         this.button(wujieRow, "回退至 " + version, async () => {
           const bundle = this.pm.state.verified!;
           if (this.pm.state.verifiedHashes)
             await verifyBundle(bundle, this.pm.state.verifiedHashes);
           await this.pm.installer.install("wujie-sync", bundle);
-          this.pm.state.installedWujieTag = JSON.parse(
+          this.pm.state.installedWujieTag = manifestVersion(
             bundle["manifest.json"]!,
-          ).version;
+          );
           new Notice("已恢复本机确认正常的代码版本；当前配置保持不变");
         });
         wujieRow.descEl.createDiv({
