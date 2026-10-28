@@ -1,0 +1,103 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { build } from "esbuild";
+import { readFile } from "node:fs/promises";
+await build({
+  entryPoints: ["src/main.ts"],
+  outfile: "test-output/page.mjs",
+  bundle: true,
+  format: "esm",
+  platform: "node",
+  external: ["electron"],
+  alias: { obsidian: "./tests/page-obsidian-stub.ts" },
+  plugins: [
+    {
+      name: "expose-page-for-test",
+      setup(builder) {
+        builder.onLoad({ filter: /src[\\/]main\.ts$/ }, async (args) => ({
+          contents: (await readFile(args.path, "utf8")).replace(
+            "class Page extends",
+            "export class Page extends",
+          ),
+          loader: "ts",
+        }));
+      },
+    },
+  ],
+});
+const { Page } = await import("../test-output/page.mjs");
+function fixture() {
+  const p = Object.create(Page.prototype);
+  let saves = 0,
+    renders = 0;
+  const sha256 = { "main.js": "a".repeat(64), "manifest.json": "b".repeat(64) };
+  const entry = {
+    id: "wujie-sync",
+    version: "1.1.2-alpha.2",
+    channel: "Alpha",
+    baseUrl: "https://example.test/",
+    sha256,
+  };
+  Object.assign(p, {
+    pageVisible: true,
+    openGeneration: 1,
+    working: false,
+    selected: "1.1.2-alpha.1",
+    releases: [
+      { version: "1.1.2-alpha.1", channel: "Alpha" },
+      { version: "1.1.1", channel: "Stable" },
+    ],
+    refreshWujieView: () => renders++,
+    pm: {
+      state: {},
+      net: {
+        json: async () => ({ releases: [entry] }),
+        fastJson: () => {
+          throw Error("GitHub must not be queried on open");
+        },
+      },
+      save: async () => saves++,
+    },
+  });
+  return { p, entry, counts: () => ({ saves, renders }) };
+}
+test("opening refreshes site Alpha without GitHub and keeps stable choices", async () => {
+  const { p, counts } = fixture();
+  await p.refreshAlphaOnOpen(1);
+  assert.deepEqual(
+    p.releases.map((r) => r.version),
+    ["1.1.2-alpha.2", "1.1.1"],
+  );
+  assert.equal(p.selected, "1.1.2-alpha.2");
+  assert.deepEqual(counts(), { saves: 1, renders: 1 });
+});
+test("late auto response cannot overwrite a newer refresh or a hidden page", async () => {
+  const { p } = fixture();
+  let finish;
+  p.pm.net.json = () => new Promise((r) => (finish = r));
+  const request = p.refreshAlphaOnOpen(1);
+  p.openGeneration++;
+  finish({ releases: [] });
+  await request;
+  assert.equal(p.selected, "1.1.2-alpha.1");
+});
+test("manual refresh updates both channels", async () => {
+  const { p, entry } = fixture();
+  p.pm.state.feedUrl = "https://example.test/stable.json";
+  let calls = [];
+  p.pm.net.json = async (url) => {
+    calls.push(url);
+    return {
+      releases: url.includes("stable.json")
+        ? [{ version: "1.1.2", channel: "Stable" }]
+        : [entry],
+    };
+  };
+  await p.refreshWujieAll();
+  assert.equal(calls.length, 2);
+  assert.deepEqual(
+    p.releases.map((r) => r.version),
+    ["1.1.2-alpha.2", "1.1.2"],
+  );
+  assert.equal(p.openGeneration, 2);
+});

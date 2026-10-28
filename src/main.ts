@@ -107,6 +107,9 @@ class Page extends PluginSettingTab {
   releases: WujieRelease[] = [];
   selected = "";
   alphaSourceWarning = "";
+  pageVisible = false;
+  openGeneration = 0;
+  refreshWujieView?: () => void;
 
   constructor(private pm: PM) {
     super(pm.app, pm);
@@ -116,6 +119,9 @@ class Page extends PluginSettingTab {
         ?.version || "";
   }
   hide() {
+    this.pageVisible = false;
+    this.openGeneration++;
+    this.refreshWujieView = undefined;
     this.query = "";
     this.resultMetaEls.clear();
   }
@@ -145,6 +151,9 @@ class Page extends PluginSettingTab {
     );
   }
   display() {
+    const opening = !this.pageVisible;
+    this.pageVisible = true;
+    if (opening) this.openGeneration++;
     const el = this.containerEl;
     el.empty();
     el.createEl("h2", { text: this.pm.manifest.name });
@@ -406,143 +415,173 @@ class Page extends PluginSettingTab {
         this.button(row, "加速更新", () => this.installCommunity(e));
       }
     }
-    const current = p.manifests["wujie-sync"];
-    const wujieRow = new Setting(el).setClass(
-      "pmcn-installed-row pmcn-wujie-row",
-    );
-    wujieRow.nameEl.createSpan({ cls: "pmcn-plugin-name", text: "无界同步" });
-    wujieRow.nameEl.createSpan({
-      cls: "pmcn-plugin-meta",
-      text:
-        (current ? " v" + current.version : " · 未安装") +
-        " 作者：" +
-        (current?.author || "lihy"),
-    });
-    wujieRow.setDesc(
-      current?.description ||
-        "在不同设备间同步笔记、附件和设置，支持测试版本安装与回退。",
-    );
-
-    wujieRow.addExtraButton((b) =>
-      b
-        .setIcon("more-vertical")
-        .setTooltip("回退版本")
-        .setDisabled(this.working)
-        .onClick(() => {
-          new Menu()
-            .addItem((item) =>
-              item
-                .setTitle("标记当前版本正常")
-                .setDisabled(!current)
-                .onClick(
-                  () =>
-                    void this.task(async () => {
-                      if (
-                        await this.pm.confirm(
-                          "确认已在本机验证当前无界同步工作正常？保存代码作为回退目标，保留本机配置。",
-                        )
-                      )
-                        await this.markWujieVerified();
-                    }),
-                ),
-            )
-            .showAtPosition({
-              x: b.extraSettingsEl.getBoundingClientRect().left,
-              y: b.extraSettingsEl.getBoundingClientRect().bottom,
-            });
-        }),
-    );
-    this.button(wujieRow, "检查更新", async () => {
-      const [history, alphaSite] = await Promise.allSettled([
-        loadWujieReleases(this.pm.net, this.pm.state.feedUrl),
-        loadSiteAlpha(this.pm.net),
-      ]);
-      if (history.status === "rejected" && alphaSite.status === "rejected")
-        throw Error("正式版与 Alpha 版本源暂不可用，请稍后重试");
-      this.alphaSourceWarning =
-        alphaSite.status === "rejected" ? String(alphaSite.reason) : "";
-      const combined = [
-        ...(alphaSite.status === "fulfilled" ? alphaSite.value : []),
-        ...(history.status === "fulfilled"
-          ? history.value.filter((r) => r.channel === "Stable")
-          : []),
-      ];
-      const releases = [
-        ...new Map(combined.map((r) => [r.version, r])).values(),
-      ].sort(
-        (a, b) =>
-          (Date.parse(b.publishedAt || "") || 0) -
-          (Date.parse(a.publishedAt || "") || 0),
+    const wujieContainer = el.createDiv({ cls: "pmcn-wujie-section" });
+    const renderWujie = () => {
+      const el = wujieContainer;
+      el.empty();
+      const current = p.manifests["wujie-sync"];
+      const wujieRow = new Setting(el).setClass(
+        "pmcn-installed-row pmcn-wujie-row",
       );
-      this.releases = releases;
-      this.pm.state.wujieReleases = releases;
-      this.selected =
-        (releases.find((r) => r.channel === "Alpha") || releases[0])?.version ||
-        "";
-      new Notice(
-        "已读取 " +
-          releases.length +
-          " 个版本" +
-          (this.alphaSourceWarning
-            ? "，Alpha 下载站暂时不可用"
-            : releases.some((r) => r.channel === "Alpha")
-              ? "，Alpha 与稳定版本已刷新"
-              : "，暂无已发布 Alpha"),
-      );
-    });
-    if (this.pm.state.verified) {
-      let version = "已确认版本";
-      try {
-        version = JSON.parse(this.pm.state.verified["manifest.json"]!).version;
-      } catch {}
-      this.button(wujieRow, "回退至 " + version, async () => {
-        const bundle = this.pm.state.verified!;
-        if (this.pm.state.verifiedHashes)
-          await verifyBundle(bundle, this.pm.state.verifiedHashes);
-        await this.pm.installer.install("wujie-sync", bundle);
-        this.pm.state.installedWujieTag = JSON.parse(
-          bundle["manifest.json"]!,
-        ).version;
-        new Notice("已恢复本机确认正常的代码版本；当前配置保持不变");
-      });
-      wujieRow.descEl.createDiv({
+      wujieRow.nameEl.createSpan({ cls: "pmcn-plugin-name", text: "无界同步" });
+      wujieRow.nameEl.createSpan({
         cls: "pmcn-plugin-meta",
-        text: "回退目标：" + version + "（本机已确认正常；仅恢复代码）",
+        text:
+          (current ? " v" + current.version : " · 未安装") +
+          " 作者：" +
+          (current?.author || "lihy"),
       });
-    }
-    if (recentReleases(this.releases).length) {
-      const recent = recentReleases(this.releases);
-      if (!recent.some((r) => r.version === this.selected))
-        this.selected = recent[0].version;
-      const choices = new Setting(el)
-        .setName("历史版本")
-        .setClass("pmcn-release-picker");
-      choices.addDropdown((d) => {
-        for (const [channel, label] of [
-          ["Alpha", "Alpha 测试版"],
-          ["Stable", "稳定版"],
-        ] as const) {
-          const versions = recent.filter((r) => r.channel === channel);
-          if (!versions.length) continue;
-          const group = d.selectEl.createEl("optgroup", { attr: { label } });
-          for (const r of versions)
-            group.createEl("option", {
-              text: r.version,
-              attr: { value: r.version },
-            });
-        }
-        d.setValue(this.selected)
+      wujieRow.setDesc(
+        current?.description ||
+          "在不同设备间同步笔记、附件和设置，支持测试版本安装与回退。",
+      );
+
+      wujieRow.addExtraButton((b) =>
+        b
+          .setIcon("more-vertical")
+          .setTooltip("回退版本")
           .setDisabled(this.working)
-          .onChange((v) => (this.selected = v));
+          .onClick(() => {
+            new Menu()
+              .addItem((item) =>
+                item
+                  .setTitle("标记当前版本正常")
+                  .setDisabled(!current)
+                  .onClick(
+                    () =>
+                      void this.task(async () => {
+                        if (
+                          await this.pm.confirm(
+                            "确认已在本机验证当前无界同步工作正常？保存代码作为回退目标，保留本机配置。",
+                          )
+                        )
+                          await this.markWujieVerified();
+                      }),
+                  ),
+              )
+              .showAtPosition({
+                x: b.extraSettingsEl.getBoundingClientRect().left,
+                y: b.extraSettingsEl.getBoundingClientRect().bottom,
+              });
+          }),
+      );
+      this.button(wujieRow, "检查更新", async () => {
+        await this.refreshWujieAll();
       });
-      this.button(choices, "安装所选版本", async () => {
-        const r = this.releases.find((r) => r.version === this.selected);
-        if (!r) throw Error("请选择可用版本");
-        await this.installWujie(r);
-      });
-    }
+      if (this.pm.state.verified) {
+        let version = "已确认版本";
+        try {
+          version = JSON.parse(
+            this.pm.state.verified["manifest.json"]!,
+          ).version;
+        } catch {}
+        this.button(wujieRow, "回退至 " + version, async () => {
+          const bundle = this.pm.state.verified!;
+          if (this.pm.state.verifiedHashes)
+            await verifyBundle(bundle, this.pm.state.verifiedHashes);
+          await this.pm.installer.install("wujie-sync", bundle);
+          this.pm.state.installedWujieTag = JSON.parse(
+            bundle["manifest.json"]!,
+          ).version;
+          new Notice("已恢复本机确认正常的代码版本；当前配置保持不变");
+        });
+        wujieRow.descEl.createDiv({
+          cls: "pmcn-plugin-meta",
+          text: "回退目标：" + version + "（本机已确认正常；仅恢复代码）",
+        });
+      }
+      if (recentReleases(this.releases).length) {
+        const recent = recentReleases(this.releases);
+        if (!recent.some((r) => r.version === this.selected))
+          this.selected = recent[0].version;
+        const choices = new Setting(el)
+          .setName("历史版本")
+          .setClass("pmcn-release-picker");
+        choices.addDropdown((d) => {
+          for (const [channel, label] of [
+            ["Alpha", "Alpha 测试版"],
+            ["Stable", "稳定版"],
+          ] as const) {
+            const versions = recent.filter((r) => r.channel === channel);
+            if (!versions.length) continue;
+            const group = d.selectEl.createEl("optgroup", { attr: { label } });
+            for (const r of versions)
+              group.createEl("option", {
+                text: r.version,
+                attr: { value: r.version },
+              });
+          }
+          d.setValue(this.selected)
+            .setDisabled(this.working)
+            .onChange((v) => (this.selected = v));
+        });
+        this.button(choices, "安装所选版本", async () => {
+          const r = this.releases.find((r) => r.version === this.selected);
+          if (!r) throw Error("请选择可用版本");
+          await this.installWujie(r);
+        });
+      }
+    };
+    this.refreshWujieView = renderWujie;
+    renderWujie();
+    if (opening) void this.refreshAlphaOnOpen(this.openGeneration);
   }
 
+  async refreshWujieAll() {
+    this.openGeneration++;
+    const [history, alpha] = await Promise.allSettled([
+      loadWujieReleases(this.pm.net, this.pm.state.feedUrl),
+      loadSiteAlpha(this.pm.net),
+    ]);
+    if (history.status === "rejected" && alpha.status === "rejected")
+      throw Error("版本源暂不可用，请稍后重试");
+    const nextAlpha =
+      alpha.status === "fulfilled"
+        ? alpha.value.filter((r) => r.channel === "Alpha")
+        : this.releases.filter((r) => r.channel === "Alpha");
+    const nextStable =
+      history.status === "fulfilled"
+        ? history.value.filter((r) => r.channel === "Stable")
+        : this.releases.filter((r) => r.channel === "Stable");
+    this.releases = [...nextAlpha, ...nextStable];
+    this.pm.state.wujieReleases = this.releases;
+    this.selected = recentReleases(this.releases)[0]?.version || "";
+    this.alphaSourceWarning =
+      alpha.status === "rejected" ? "Alpha版本源暂不可用" : "";
+    new Notice(
+      alpha.status === "rejected"
+        ? "稳定版已刷新，Alpha 暂时使用上次记录"
+        : "Alpha 与稳定版本已刷新",
+    );
+  }
+  async refreshAlphaOnOpen(generation: number) {
+    const selection = this.selected;
+    try {
+      const alpha = await loadSiteAlpha(this.pm.net);
+      if (!this.pageVisible || generation !== this.openGeneration) return;
+      this.alphaSourceWarning = "";
+      this.releases = [
+        ...alpha.filter((r) => r.channel === "Alpha"),
+        ...this.releases.filter((r) => r.channel === "Stable"),
+      ];
+      this.pm.state.wujieReleases = this.releases;
+      if (
+        this.selected === selection ||
+        !this.releases.some((r) => r.version === this.selected)
+      )
+        this.selected = recentReleases(this.releases)[0]?.version || "";
+      if (!this.working) {
+        await this.pm.save();
+        if (this.pageVisible && generation === this.openGeneration)
+          this.refreshWujieView?.();
+      }
+    } catch {
+      if (this.pageVisible && generation === this.openGeneration) {
+        this.alphaSourceWarning = "Alpha版本源暂不可用";
+        new Notice("Alpha 版本暂时无法刷新，当前显示上次记录", 5000);
+      }
+    }
+  }
   async markWujieVerified() {
     const bundle = await readBundle(
       this.app.vault.adapter,

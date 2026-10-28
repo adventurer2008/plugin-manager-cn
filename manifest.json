@@ -1,7 +1,7 @@
 {
   "id": "plugin-manager-cn",
   "name": "Community Manager CN",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "minAppVersion": "1.7.2",
   "description": "搜索、安装和更新社区插件，管理无界同步测试版本。",
   "author": "Wujie Sync",

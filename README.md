@@ -1,4 +1,4 @@
-# Community Manager CN — Windows MVP 0.1.9
+# Community Manager CN — Windows MVP 0.1.10
 
 单页 Obsidian 社区插件管理器。
 
@@ -72,3 +72,5 @@
 `scripts/publish-alpha.ps1` 需要 PowerShell、SSH/scp、服务器端 Python 3.9+，以及自行配置的发布服务器、SSH 目标和密钥。服务器须已配置上传目录、下载站目录和既有发行清单；仓库不含凭据。脚本上传并校验发行文件后，通过 `scripts/update-alpha-index.py` 刷新完整 Alpha 清单、最新版本指针及合并清单，写入前备份清单。
 
 后续发布Alpha使用 scripts/publish-alpha.ps1，传入 PackageDirectory（三个插件发行文件所在目录）、RootTarget、IdentityFile。脚本自动生成版本信息和摘要、上传独立版本目录、执行服务端 scripts/update-alpha-index.py 更新完整清单。已发布版本不可覆盖；正式版入口、应用服务和用户配置不变。也可在完成目录上传后执行服务端更新工具。上传与清单更新需要发布账号及root维护权限，脚本不保存密钥。
+
+0.1.10：每次进入设置页面自动后台读取下载站Alpha并更新下拉，打开时不查GitHub；无界同步的检查更新按钮同时刷新Alpha和稳定版。读取失败保留上次结果并提示。

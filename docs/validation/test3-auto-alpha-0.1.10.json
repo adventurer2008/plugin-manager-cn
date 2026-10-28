@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-28",
+  "vault": "E:/Data/test3",
+  "version": "0.1.10",
+  "pageOpenedWithoutCheck": true,
+  "automaticallySelectedAlpha": "1.1.2-alpha.3",
+  "manualRefreshResult": "Alpha 与稳定版本已刷新",
+  "alphaLimit": 3,
+  "stableLimit": 5,
+  "targetPluginChanged": false,
+  "testsPassed": 18
+}
