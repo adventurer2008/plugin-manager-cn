@@ -2,6 +2,8 @@
 
 首次社区上架已完成，后续版本无需重复提交申请。
 
+移动端发布检查读取 docs/validation/platform-acceptance.json：默认要求真机验收。维护者明确要求先发布后测试时，记录该版本的延期验收授权，并如实披露尚未验证；该授权不能跨版本复用。0.1.15已按2026-10-29的明确指示记录为延期验收，没有虚构设备结果。
+
 1. 完成代码修改后运行 `npm run version:prepare -- 0.1.15`（替换为下一版本）。此命令同步 package、lockfile、manifest、versions 和 README 的版本号。
 2. 检查差异并提交到 main，推送 main。普通 push 和 PR 自动运行元数据检查、类型检查、测试和构建。
 3. 给该 main 提交创建同名标签，例如 `git tag 0.1.15`，再执行 `git push origin 0.1.15`。标签必须是纯数字 x.y.z，且与 manifest 完全一致。

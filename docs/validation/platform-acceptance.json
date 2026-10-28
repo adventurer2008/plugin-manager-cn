@@ -1,5 +1,11 @@
 {
   "pluginVersion": "0.1.15",
-  "status": "pending",
+  "status": "deferred",
+  "releaseAuthorization": {
+    "pluginVersion": "0.1.15",
+    "date": "2026-10-29",
+    "maintainerApproved": true,
+    "instruction": "你先发布，后面我统一测试"
+  },
   "devices": []
 }
